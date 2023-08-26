@@ -20,6 +20,7 @@ const recievedMessageHTML = fs.readFileSync(join(currentWorkingDirectory, "./tem
 app.post("/sendMail", async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { email, subject, name, message } = req.body;
+        if(!email || !subject || !name || !message) throw new Error("Please provide all email, subject, name, message")
 
         let afterchangeGettingMessage = gettingMessageHTML.replace(/\{%NAME%}/g, name);
         afterchangeGettingMessage = afterchangeGettingMessage.replace(/\{%EMAIL%}/g, email);
@@ -28,9 +29,8 @@ app.post("/sendMail", async (req: Request, res: Response, next: NextFunction) =>
 
 
         //    This is sending me my mail 
-        await sendMail(process.env.GEMAIL_MY!, subject, afterchangeGettingMessage)
-        await sendMail(email, "Message Received", recievedMessageHTML)
-
+        await Promise.all([sendMail(process.env.GEMAIL_MY!, subject, afterchangeGettingMessage), sendMail(email, "Message Received", recievedMessageHTML)])
+        
         res.status(200).json({
             status: "success",
             "message": "Message sended Successfully"
