@@ -11,9 +11,7 @@ import sendMail from "./email"
 
 const app = express()
 
-app.use(cors({
-    origin : "https://portfolio-hashib.netlify.app/"
-}))
+app.use(cors())
 
 app.use(express.json({limit : "10kb"}))
 
