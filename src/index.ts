@@ -4,12 +4,18 @@ dontenv.config()
 import fs from "fs"
 import { join } from "path"
 import express, { NextFunction, Request, Response } from "express"
+import cors from "cors"
+
 import sendMail from "./email"
 
 
 const app = express()
 
-app.use(express.json())
+app.use(cors({
+    origin : "https://portfolio-hashib.netlify.app/"
+}))
+
+app.use(express.json({limit : "10kb"}))
 
 const currentWorkingDirectory = process.cwd()
 
